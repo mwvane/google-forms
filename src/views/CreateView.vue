@@ -3,26 +3,33 @@
     <FormComponent></FormComponent>
     <button @click="add">add</button>
     <button @click="update(1)">update</button>
+    <MultipleChoice v-for="question in this.getQuestions" :key="question.id" :question="question" ></MultipleChoice>
   </div>
 </template>
 
 <script>
 import FormComponent from "@/components/FormComponent";
 import Question from "@/question";
+import Helpers from "@/components/helpers/helpers.js";
 import {mapActions, mapGetters} from "vuex";
-
+import MultipleChoice from "@/components/MultipleChoice";
 export default {
   name: "CreateView",
   components: {
-    FormComponent
+    FormComponent,
+    MultipleChoice
   },
   computed: {
-    ...mapGetters(['getMaxID']),
+    ...mapGetters(['getQuestions']),
   },
   methods: {
     ...mapActions(['addToQuestions', "updateQuestion"]),
     add() {
-      let question = new Question(this.getMaxID + 1, '', '', [])
+      let question = new Question(
+          Helpers.getID(this.getQuestions),
+          '',
+          '',
+          [{id:1, title: 'option 1'}])
       this.addToQuestions(question)
     },
     update(id){
