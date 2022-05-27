@@ -2,8 +2,8 @@
   <div class="container">
     <FormComponent></FormComponent>
     <button @click="add">add</button>
-    <button @click="update(1)">update</button>
-    <MultipleChoice v-for="question in this.getQuestions" :key="question.id" :question="question" ></MultipleChoice>
+    <MultipleChoice v-for="question in questions" :key="question.id" :question="question"
+                    :selectOptions="selectOptions"></MultipleChoice>
   </div>
 </template>
 
@@ -11,31 +11,52 @@
 import FormComponent from "@/components/FormComponent";
 import Question from "@/question";
 import Helpers from "@/components/helpers/helpers.js";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import MultipleChoice from "@/components/MultipleChoice";
+
 export default {
   name: "CreateView",
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     FormComponent,
     MultipleChoice
   },
   computed: {
-    ...mapGetters(['getQuestions']),
+    ...mapState(['questions']),
   },
   methods: {
     ...mapActions(['addToQuestions', "updateQuestion"]),
     add() {
       let question = new Question(
-          Helpers.getID(this.getQuestions),
+          Helpers.getID(this.questions),
           '',
-          '',
-          [{id:1, title: 'option 1'}])
+          'Multiple choices',
+          [{id: 1, title: 'option 1'}])
       this.addToQuestions(question)
     },
-    update(id){
-      this.updateQuestion({oldID: id, newQuestion: new Question(id,'who are you?','',[{id:1, title: ''}])})
+  },
+  data() {
+    return {
+      selectOptions: [
+        {
+          id: 1,
+          value: "Multiple choices"
+        },
+        {
+          id: 2,
+          value: "Check boxes"
+        },
+        {
+          id: 3,
+          value: "Dropdown"
+        },
+        {
+          id: 4,
+          value: "Paragraph"
+        },
+      ]
     }
-  }
+  },
 }
 </script>
 
