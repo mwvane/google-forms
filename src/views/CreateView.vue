@@ -4,6 +4,19 @@
     <button @click="add">add</button>
     <MultipleChoice v-for="question in questions" :key="question.id" :question="question"
                     :selectOptions="selectOptions"></MultipleChoice>
+    <ComponentLayout v-for="question in questions"
+                     :key="question.id"
+                     :selectOptions="selectOptions"
+                     :id="question.id"
+                     @deleteTemplate="deleteQuestion"
+                     @changeType="changeType">
+      <Option v-for="option in question.answers"
+              :key="option.id"
+              :option="option"
+              :questionID="question.id"
+              @removeOption="deleteOption"></Option>
+    </ComponentLayout>
+
   </div>
 </template>
 
@@ -13,19 +26,32 @@ import Question from "@/question";
 import Helpers from "@/components/helpers/helpers.js";
 import {mapActions, mapGetters, mapState} from "vuex";
 import MultipleChoice from "@/components/MultipleChoice";
+import ComponentLayout from "@/components/ComponentLayout";
+import Paragraph from "@/components/Paragraph";
+import Option from "@/components/Option";
 
 export default {
   name: "CreateView",
   components: {
     // eslint-disable-next-line vue/no-unused-components
     FormComponent,
-    MultipleChoice
+    MultipleChoice,
+    ComponentLayout,
+    Option,
+    // Paragraph,
   },
   computed: {
     ...mapState(['questions']),
   },
   methods: {
-    ...mapActions(['addToQuestions', "updateQuestion"]),
+    ...mapActions(
+        [
+          'addToQuestions',
+          "updateQuestion",
+          "removeOption",
+          "removeQuestion",
+          "updateType",
+        ]),
     add() {
       let question = new Question(
           Helpers.getID(this.questions),
@@ -33,6 +59,16 @@ export default {
           'Multiple choices',
           [{id: 1, title: 'option 1'}])
       this.addToQuestions(question)
+    },
+    changeType(id,type) {
+      this.updateType({questionID: id, type: type})
+    },
+    deleteOption(id, questionID) {
+      this.removeOption({questionID: questionID, optionID: id})
+    },
+    deleteQuestion(id) {
+      console.log(id)
+      this.removeQuestion(id)
     },
   },
   data() {

@@ -18,6 +18,7 @@ export default {
   name: "Option",
   props: {
     option: Object,
+    questionID:Number,
     type: String,
     optionNumber: Number,
   },
@@ -28,7 +29,7 @@ export default {
   },
   methods: {
     remove() {
-      this.$emit('removeOption', this.option.id)
+      this.$emit('removeOption', this.option.id,this.questionID)
     }
   }
 }
