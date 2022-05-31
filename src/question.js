@@ -1,5 +1,3 @@
-import Helpers from "@/components/helpers/helpers";
-
 export default
 class Question{
     constructor(id, question, type,answers) {

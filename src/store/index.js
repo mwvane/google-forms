@@ -18,12 +18,10 @@ export default createStore({
             question.id = Helpers.getID(state.questions)
             // question.answers = [...question.answers]
             state.questions.push(question)
-            console.log(state.questions)
         },
         addOptions(state, {question, option}) {
             let questionIndex = state.questions.findIndex(item => question.id === item.id)
             state.questions[questionIndex].answers.push(option)
-            console.log(state.questions[questionIndex])
         },
         updateQuestion(state, {questionId, title}) {
             let questionIndex = state.questions.findIndex(question => questionId === question.id)
@@ -48,7 +46,12 @@ export default createStore({
             const question = state.questions[index]
             question.answers = question.answers.filter(item => item.id !== optionID)
             state.questions[index] = {...question}
-        }
+        },
+        removeAllOptions(state, questionID){
+            let index = Helpers.findIndexById(questionID, state.questions)
+            state.questions[index].answers = []
+            console.log(state.questions)
+        },
     },
     actions: {
         addToQuestions({commit}, question) {
@@ -71,6 +74,9 @@ export default createStore({
         },
         removeOption({commit}, {questionID, optionID}) {
             commit('removeOption', {questionID, optionID})
-        }
-    },
+        },
+        removeAllOptions({commit}, questionID) {
+            commit('removeAllOptions', questionID)
+        },
+    }
 })

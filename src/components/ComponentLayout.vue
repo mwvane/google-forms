@@ -1,7 +1,7 @@
 <template>
   <div class="component-container">
     <div class="header">
-      <input class="input" type="text" placeholder="Question">
+      <input class="input" type="text" placeholder="Question" v-model="questionText" @input="textChange">
       <select class="dropdown" name="typeSelector" id="typeSelector" @change="changeType">
         <option v-for="item in selectOptions" :key="item" :value="item.value" :id="item.id"> {{ item.value }}</option>
       </select>
@@ -28,6 +28,14 @@ export default {
     },
     deleteTemplate() {
       this.$emit('deleteTemplate', this.id)
+    },
+    textChange(e){
+      this.$emit('textChange', this.id, e.target.value)
+    }
+  },
+  data(){
+    return{
+      questionText: ''
     }
   }
 }

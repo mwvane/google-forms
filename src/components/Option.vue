@@ -2,19 +2,19 @@
   <div class="option-container">
     <div v-if="type === 'Multiple choice'">
       <font-awesome-icon class="icon" icon="circle-dot"></font-awesome-icon>
-      <div ></div>
+      <div></div>
     </div>
     <div v-else-if="type === 'Check box'">
       <font-awesome-icon class="icon" icon="square-check"></font-awesome-icon>
     </div>
-    <div  v-else-if="type === 'Dropdown'">
+    <div v-else-if="type === 'Dropdown'">
       <font-awesome-icon class="icon" icon="square-caret-down"></font-awesome-icon>
     </div>
-    <div  v-else-if="type === 'Paragraph'">
-      <font-awesome-icon class="icon" icon="align-left"></font-awesome-icon>
-    </div>
-    <input type="text" class="option" v-model="text">
-    <button @click="remove"><font-awesome-icon icon="circle-minus"></font-awesome-icon></button>
+    <input type="text" class="option" v-model="text" @input="textChange">
+    <button @click="remove">
+      <font-awesome-icon icon="circle-minus"></font-awesome-icon>
+    </button>
+
   </div>
 </template>
 
@@ -22,9 +22,12 @@
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Option",
+  components: {
+  },
+
   props: {
     option: Object,
-    questionID:Number,
+    questionID: Number,
     type: String,
     optionNumber: Number,
   },
@@ -35,7 +38,10 @@ export default {
   },
   methods: {
     remove() {
-      this.$emit('removeOption', this.option.id,this.questionID)
+      this.$emit('removeOption', this.option.id, this.questionID)
+    },
+    textChange(e){
+      this.$emit("textChange", this.questionID,this.option.id, e.target.value)
     }
   }
 }
@@ -50,6 +56,7 @@ export default {
 .option {
   width: 80%;
 }
+
 input {
   margin: 8px;
   padding: 8px;
@@ -61,8 +68,9 @@ input {
 input:focus {
   border-bottom: #5712c7 3px solid;
 }
-button{
-  border:none;
+
+button {
+  border: none;
   background: none;
   font-size: 16px;
   cursor: pointer;
@@ -70,13 +78,23 @@ button{
   margin-top: 10px;
   color: #504e4e;
 }
-button:hover{
+
+button:hover {
   font-weight: bold;
   color: darkred;
 }
-.icon{
+
+.icon {
   height: 20px;
   width: 20px;
   margin-top: 12px;
+}
+
+span {
+  padding-left: 20px;
+  margin-left: 10px;
+  width: 80%;
+  border-bottom: 1px dotted;
+  color: #6c6a6a;
 }
 </style>

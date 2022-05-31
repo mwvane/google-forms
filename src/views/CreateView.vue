@@ -13,15 +13,27 @@
                      :key="question.id"
                      :selectOptions="selectOptions"
                      :id="question.id"
-                     @deleteTemplate="deleteQuestion">
-      <Option v-for="option in question.answers"
-              :key="question.id + '_' + option.id"
-              :option="option"
-              :questionID="question.id"
-              :type="question.type"
-              @removeOption="deleteOption"></Option>
-      <button class="btn-add" @click="addOption(question)"><font-awesome-icon icon="add"></font-awesome-icon> Add
-        {{question.type}}</button>
+                     @deleteTemplate="deleteQuestion"
+                     @textChange="changeQuestion">
+      <div v-if="question.type === 'Paragraph'">
+        <ParagraphComponent>
+        </ParagraphComponent>
+      </div>
+      <div v-else>
+        <Option v-for="option in question.answers"
+                :key="question.id + '_' + option.id"
+                :option="option"
+                :questionID="question.id"
+                :type="question.type"
+                @removeOption="deleteOption"
+                @textChange="updateOptionTitle"
+        ></Option>
+        <button class="btn-add" @click="addOption(question)">
+          <font-awesome-icon icon="add"></font-awesome-icon>
+          Add
+          {{ question.type }}
+        </button>
+      </div>
       <font-awesome-icon @click="copy(question)" class="copy" icon="copy"></font-awesome-icon>
     </ComponentLayout>
 
@@ -35,8 +47,8 @@ import Helpers from "@/components/helpers/helpers.js";
 import {mapActions, mapGetters, mapState} from "vuex";
 import MultipleChoice from "@/components/MultipleChoice";
 import ComponentLayout from "@/components/ComponentLayout";
-import Paragraph from "@/components/Paragraph";
 import Option from "@/components/Option";
+import ParagraphComponent from "@/components/ParagraphComponent";
 
 export default {
   name: "CreateView",
@@ -46,6 +58,7 @@ export default {
     MultipleChoice,
     ComponentLayout,
     Option,
+    ParagraphComponent
     // Paragraph,
   },
   computed: {
@@ -60,6 +73,8 @@ export default {
           "removeQuestion",
           "updateType",
           "addOptions",
+          "removeAllOptions",
+          "updateOption",
         ]),
     add(question) {
       if (question === undefined) {
@@ -71,16 +86,29 @@ export default {
       }
       this.addToQuestions(question)
     },
-    copy(question){
+    changeQuestion(id, val){
+      this.updateQuestion({questionId: id, title: val})
+    },
+    copy(question) {
       this.addToQuestions(question.copy())
     },
     changeType(id, type) {
+      if (type === 'Paragraph') {
+        this.removeAllOptions(id)
+      }
       this.updateType({questionID: id, type: type})
     },
     addOption(question) {
       this.addOptions({
         question: question,
         option: {id: Helpers.getID(question.answers), title: `option ${Helpers.getID(question.answers)}`}
+      })
+    },
+    updateOptionTitle(questionID,optionID,val) {
+      this.updateOption({
+        questionID: questionID,
+        optionID: optionID,
+        title: val
       })
     },
     deleteOption(id, questionID) {
@@ -125,25 +153,30 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-.btn-add{
+
+.btn-add {
   border: none;
-  background-color: rgba(0,0,0,0%);
+  background-color: rgba(0, 0, 0, 0%);
   color: #504e4e;
   cursor: pointer;
+  margin-top: 20px;
 }
-.btn-add:hover{
+
+.btn-add:hover {
   transition: .3s;
   font-size: 14px;
   color: #81ae34;
 }
-.copy{
+
+.copy {
   position: absolute;
   bottom: 10px;
   right: 35px;
   cursor: pointer;
   color: #494646;
 }
-.copy:hover{
+
+.copy:hover {
   color: #236ed1;
 }
 </style>
