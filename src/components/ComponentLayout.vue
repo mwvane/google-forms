@@ -10,7 +10,7 @@
       <slot></slot>
     </div>
     <div class="footer">
-      <button @click="deleteTemplate">Delete</button>
+      <font-awesome-icon class="del-btn" @click="deleteTemplate" icon="trash"></font-awesome-icon>
     </div>
   </div>
 </template>
@@ -65,7 +65,20 @@ export default {
   .input:focus{
     border-bottom: #5712c7 3px solid;
   }
-  button{
-    margin-top: 30px;
+  .del-btn{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    color: #494646;
+  }
+  .del-btn:hover{
+    color: darkred;
+  }
+  .body{
+    margin-top: 10px;
+  }
+  .footer{
+    margin-top: 12px;
   }
 </style>

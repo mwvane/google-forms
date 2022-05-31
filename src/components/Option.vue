@@ -1,14 +1,20 @@
 <template>
   <div class="option-container">
-    <div v-if="type === 'Multiple choices'">
-      <div class="radio"></div>
+    <div v-if="type === 'Multiple choice'">
+      <font-awesome-icon class="icon" icon="circle-dot"></font-awesome-icon>
+      <div ></div>
     </div>
-    <div v-else-if="type === 'Check boxes'">
-      <div class="check-box"></div>
+    <div v-else-if="type === 'Check box'">
+      <font-awesome-icon class="icon" icon="square-check"></font-awesome-icon>
     </div>
-    <div class="dropdown" v-else-if="type === 'Dropdown'">{{option.id}}. </div>
+    <div  v-else-if="type === 'Dropdown'">
+      <font-awesome-icon class="icon" icon="square-caret-down"></font-awesome-icon>
+    </div>
+    <div  v-else-if="type === 'Paragraph'">
+      <font-awesome-icon class="icon" icon="align-left"></font-awesome-icon>
+    </div>
     <input type="text" class="option" v-model="text">
-    <button @click="remove">x</button>
+    <button @click="remove"><font-awesome-icon icon="circle-minus"></font-awesome-icon></button>
   </div>
 </template>
 
@@ -38,6 +44,7 @@ export default {
 <style scoped>
 .option-container {
   display: flex;
+  color: #504e4e;
 }
 
 .option {
@@ -61,29 +68,15 @@ button{
   cursor: pointer;
   height: 20px;
   margin-top: 10px;
-  color: darkred;
+  color: #504e4e;
 }
 button:hover{
   font-weight: bold;
+  color: darkred;
 }
-.radio{
+.icon{
   height: 20px;
   width: 20px;
-  border-radius: 50%;
-  background-color: #afacac;
   margin-top: 12px;
-}
-.check-box{
-  height: 18px;
-  width: 18px;
-  border-radius: 6px;
-  border: 2px solid rgba(45,45,45,40%);
-  margin-top: 12px;
-}
-.dropdown{
-  height: 18px;
-  width: 18px;
-  margin-top: 16px;
-  text-align: center;
 }
 </style>

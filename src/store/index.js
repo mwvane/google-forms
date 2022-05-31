@@ -15,6 +15,8 @@ export default createStore({
     },
     mutations: {
         addToQuestions(state, question) {
+            question.id = Helpers.getID(state.questions)
+            // question.answers = [...question.answers]
             state.questions.push(question)
             console.log(state.questions)
         },

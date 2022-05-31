@@ -1,20 +1,28 @@
 <template>
   <div class="container">
     <FormComponent></FormComponent>
-    <button @click="add">add</button>
-    <MultipleChoice v-for="question in questions" :key="question.id" :question="question"
-                    :selectOptions="selectOptions"></MultipleChoice>
-    <ComponentLayout v-for="question in questions"
+    <button @click="add()">add</button>
+    <MultipleChoice v-for="question in questions"
+                    :key="question.id"
+                    :question="question"
+                    :selectOptions="selectOptions">
+    </MultipleChoice>
+
+    <ComponentLayout @changeType="changeType"
+                     v-for="question in questions"
                      :key="question.id"
                      :selectOptions="selectOptions"
                      :id="question.id"
-                     @deleteTemplate="deleteQuestion"
-                     @changeType="changeType">
+                     @deleteTemplate="deleteQuestion">
       <Option v-for="option in question.answers"
-              :key="option.id"
+              :key="question.id + '_' + option.id"
               :option="option"
               :questionID="question.id"
+              :type="question.type"
               @removeOption="deleteOption"></Option>
+      <button class="btn-add" @click="addOption(question)"><font-awesome-icon icon="add"></font-awesome-icon> Add
+        {{question.type}}</button>
+      <font-awesome-icon @click="copy(question)" class="copy" icon="copy"></font-awesome-icon>
     </ComponentLayout>
 
   </div>
@@ -51,17 +59,29 @@ export default {
           "removeOption",
           "removeQuestion",
           "updateType",
+          "addOptions",
         ]),
-    add() {
-      let question = new Question(
-          Helpers.getID(this.questions),
-          '',
-          'Multiple choices',
-          [{id: 1, title: 'option 1'}])
+    add(question) {
+      if (question === undefined) {
+        question = new Question(
+            1,
+            '',
+            'Multiple choice',
+            [{id: 1, title: 'option 1'}])
+      }
       this.addToQuestions(question)
     },
-    changeType(id,type) {
+    copy(question){
+      this.addToQuestions(question.copy())
+    },
+    changeType(id, type) {
       this.updateType({questionID: id, type: type})
+    },
+    addOption(question) {
+      this.addOptions({
+        question: question,
+        option: {id: Helpers.getID(question.answers), title: `option ${Helpers.getID(question.answers)}`}
+      })
     },
     deleteOption(id, questionID) {
       this.removeOption({questionID: questionID, optionID: id})
@@ -76,11 +96,11 @@ export default {
       selectOptions: [
         {
           id: 1,
-          value: "Multiple choices"
+          value: "Multiple choice"
         },
         {
           id: 2,
-          value: "Check boxes"
+          value: "Check box"
         },
         {
           id: 3,
@@ -104,5 +124,26 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.btn-add{
+  border: none;
+  background-color: rgba(0,0,0,0%);
+  color: #504e4e;
+  cursor: pointer;
+}
+.btn-add:hover{
+  transition: .3s;
+  font-size: 14px;
+  color: #81ae34;
+}
+.copy{
+  position: absolute;
+  bottom: 10px;
+  right: 35px;
+  cursor: pointer;
+  color: #494646;
+}
+.copy:hover{
+  color: #236ed1;
 }
 </style>
