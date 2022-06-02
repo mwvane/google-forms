@@ -1,29 +1,29 @@
 <template>
   <div class="option-container">
-    <div v-if="type === 'Multiple choice'">
+    <div v-if="isMultipleChoice(type)">
       <font-awesome-icon class="icon" icon="circle-dot"></font-awesome-icon>
       <div></div>
     </div>
-    <div v-else-if="type === 'Check box'">
+    <div v-else-if="isCheckBox(type)">
       <font-awesome-icon class="icon" icon="square-check"></font-awesome-icon>
     </div>
-    <div v-else-if="type === 'Dropdown'">
+    <div v-else-if="isDropdown(type)">
       <font-awesome-icon class="icon" icon="square-caret-down"></font-awesome-icon>
     </div>
-    <input type="text" class="option" v-model="text" @input="textChange">
+    <input type="text" class="option" placeholder="option..." v-model="text" @input="textChange">
     <button @click="remove">
       <font-awesome-icon icon="circle-minus"></font-awesome-icon>
     </button>
-
   </div>
 </template>
 
 <script>
+import mixin from "@/mixins/mixin";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Option",
-  components: {
-  },
+  components: {},
 
   props: {
     option: Object,
@@ -36,12 +36,13 @@ export default {
       text: this.option.title
     }
   },
+  mixins: [mixin],
   methods: {
     remove() {
-      this.$emit('removeOption', this.option.id, this.questionID)
+      this.$emit('removeOption', {option_id: this.option.id, question_id: this.questionID})
     },
-    textChange(e){
-      this.$emit("textChange", this.questionID,this.option.id, e.target.value)
+    textChange() {
+      this.$emit("textChange", {option_id: this.option.id, question_id: this.questionID, value: this.text})
     }
   }
 }
@@ -55,6 +56,7 @@ export default {
 
 .option {
   width: 80%;
+  border-bottom: 2px solid #f4efef;
 }
 
 input {

@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <router-link to="/create">
-      <Template>
+    <div>
+      <div class="create-form" @click="createForm()">
         <img class="template-img" src="../assets/plus.png" alt="blank-image">
-        <label class="title">Blank</label>
-      </Template>
-    </router-link>
+        <p class="title" @click="createForm()">Blank</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +16,11 @@ import Template from "@/components/Template";
 export default {
   name: 'HomeView',
   components: {
-    Template,
+  },
+  methods: {
+    createForm() {
+      this.$router.push({name: "create"})
+    }
   }
 }
 </script>
@@ -39,5 +43,13 @@ export default {
   width: 170px;
   text-align: center;
   text-decoration: none;
+}
+
+.create-form {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
 </style>
