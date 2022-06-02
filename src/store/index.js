@@ -43,10 +43,9 @@ export default createStore({
             state.questions[questionIndex].type = type
         },
         removeOption(state, {questionID, optionID}) {
-            let index = Helpers.findIndexById(questionID, state.questions)
+            const index = Helpers.findIndexById(questionID, state.questions)
             const question = state.questions[index]
             question.answers = question.answers.filter(item => item.id !== optionID)
-            state.questions[index] = {...question}
         },
         removeAllOptions(state, questionID){
             let index = Helpers.findIndexById(questionID, state.questions)
