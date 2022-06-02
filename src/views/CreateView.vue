@@ -13,6 +13,7 @@
                      :key="question.id"
                      :selectOptions="selectOptions"
                      :id="question.id"
+                     :question-value="question.question"
                      @deleteTemplate="deleteQuestion"
                      @textChange="changeQuestion">
       <div v-if="question.type === 'Paragraph'">
@@ -36,7 +37,7 @@
       </div>
       <font-awesome-icon @click="copy(question)" class="copy" icon="copy"></font-awesome-icon>
     </ComponentLayout>
-
+    <router-link :to="{name: 'questions', params: {id: 'questionID'}}"> go to questions</router-link>
   </div>
 </template>
 

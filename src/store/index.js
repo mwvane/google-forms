@@ -4,7 +4,8 @@ import Helpers from "@/components/helpers/helpers.js";
 export default createStore({
     state: {
         formTitle: "Untitled",
-        questions: []
+        questions: [],
+        questionnaire: [],
     },
     getters: {
         getQuestionById(state, id) {

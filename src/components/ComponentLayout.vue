@@ -20,7 +20,8 @@ export default {
   name: "ComponentLayout",
   props: {
     selectOptions: Array,
-    id: Object
+    id: Object,
+    questionValue: String
   },
   methods: {
     changeType(e) {
@@ -35,7 +36,7 @@ export default {
   },
   data(){
     return{
-      questionText: ''
+      questionText: this.questionValue
     }
   }
 }
