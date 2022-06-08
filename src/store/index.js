@@ -20,6 +20,11 @@ export default createStore({
             state.questionnaire.push(questionnaire)
             state.currentQuestionnaire = questionnaire
         },
+        removeQuestionnaire(state,id){
+            console.log(state.questionnaire)
+            state.questionnaire = state.questionnaire.filter(item => item.id !== Number(id))
+            console.log(state.questionnaire)
+        },
         addToQuestionnaire(state, question) {
             question.id = Helpers.getID(state.currentQuestionnaire.questions)
             state.currentQuestionnaire.questions.push(question)
@@ -84,6 +89,9 @@ export default createStore({
     actions: {
         addNewQuestionnaire({commit}, questionnaire) {
             commit('addNewQuestionnaire', questionnaire)
+        },
+        removeQuestionnaire({commit}, id){
+            commit('removeQuestionnaire', id)
         },
         addToQuestionnaire({commit}, question) {
             commit('addToQuestionnaire', question)
