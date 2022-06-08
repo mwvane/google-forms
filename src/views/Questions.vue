@@ -47,6 +47,7 @@
               </select>
             </div>
           </div>
+          <div v-if="question.isRequired" class="required">*</div>
         </div>
         <b-button @click="save" variant="primary">submit</b-button>
       </div>
@@ -124,5 +125,18 @@ export default {
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%),
   0 3px 1px -2px rgb(0 0 0 / 12%),
   0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+.required{
+  color: red;
+  font-weight: bold;
+  font-size: 22px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%);
+  border-bottom-right-radius: 10px;
 }
 </style>
