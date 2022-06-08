@@ -1,50 +1,57 @@
 <template>
   <div class="google-form">
-    <div class="page-header">
-      <FormHeader></FormHeader>
-    </div>
+    <div v-if="isLoaded">
+      <div class="page-header">
+        <div class="response">
 
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-9 col-xl-8" style="max-width: 800px">
-        <div class="question-buttons">
-          <b-button variant="primary" class="m-3" @click="add()"> Add</b-button>
-          <b-button @click="goToQuestions()"> Go to questions</b-button>
         </div>
-        <div class="questions">
-          <div v-if="isLoaded">
-            <ComponentLayout v-for="question in questions"
-                             :key="question.id"
-                             :id="question.id"
-                             :selectOptions="selectOptions"
-                             :question-value="question.question"
-                             @deleteTemplate="deleteQuestion"
-                             @textChange="changeQuestion"
-                             @changeType="changeType">
-              <div v-if="isParagraph(question.type)">
-                <ParagraphComponent></ParagraphComponent>
-              </div>
-              <div v-else>
-                <OptionsComponent :question="question"
-                                  @removeOption="deleteOption"
-                                  @textChange="updateOptionTitle"
-                                  @addOption="addOption(question)"
-                ></OptionsComponent>
-              </div>
-              <font-awesome-icon icon="copy"
-                                 class="copy"
-                                 @click="copy(question)"
-              ></font-awesome-icon>
-            </ComponentLayout>
+        <FormHeader
+            :response-counter="currentQuestionnaire.responses.length"
+            :response-id="Number(this.$route.params.id)">
+        </FormHeader>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-9 col-xl-8" style="max-width: 800px">
+          <div class="question-buttons">
+            <b-button variant="primary" class="m-3" @click="add()"> Add</b-button>
+            <b-button @click="goToQuestions()"> Go to questions</b-button>
           </div>
-          <div v-if="questions.length === 0 && isLoaded" class="text-center m-5">
-            <p> There are not questions yet. Create one </p>
-          </div>
-          <div class="text-center mt-5" v-if="!isLoaded">
-            <div class="spinner spinner-border"
-                 style="width: 70px; height: 70px; border-width: .6rem; color: #da8e67">
+          <div class="questions">
+            <div v-if="isLoaded">
+              <ComponentLayout v-for="question in currentQuestionnaire.questions"
+                               :key="question.id"
+                               :id="question.id"
+                               :selectOptions="selectOptions"
+                               :question-value="question.question"
+                               @deleteTemplate="deleteQuestion"
+                               @textChange="changeQuestion"
+                               @changeType="changeType">
+                <div v-if="isParagraph(question.type)">
+                  <ParagraphComponent></ParagraphComponent>
+                </div>
+                <div v-else>
+                  <OptionsComponent :question="question"
+                                    @removeOption="deleteOption"
+                                    @updateOptionTitle="updateOptionTitle"
+                                    @addOption="addOption(question)"
+                  ></OptionsComponent>
+                </div>
+                <font-awesome-icon icon="copy"
+                                   class="copy"
+                                   @click="copy(question)"
+                ></font-awesome-icon>
+              </ComponentLayout>
+            </div>
+            <div v-if="currentQuestionnaire.questions.length === 0 && isLoaded" class="text-center m-5">
+              <p> There are not questions yet. Create one </p>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="text-center mt-5" v-if="!isLoaded">
+      <div class="spinner spinner-border"
+           style="width: 70px; height: 70px; border-width: .6rem; color: #da8e67">
       </div>
     </div>
 
@@ -73,7 +80,7 @@ export default {
     // Paragraph,
   },
   computed: {
-    ...mapState(['questions']),
+    ...mapState(['questionnaire', 'currentQuestionnaire']),
   },
   data() {
     return {
@@ -106,7 +113,7 @@ export default {
   methods: {
     ...mapActions(
         [
-          'addToQuestions',
+          'addToQuestionnaire',
           "updateQuestion",
           "removeOption",
           "removeQuestion",
@@ -114,16 +121,17 @@ export default {
           "addOptions",
           "removeAllOptions",
           "updateOption",
+          "setCurrentQuestionnaire"
         ]),
     add() {
       const question = Question.getDefaultQuestion()
-      this.addToQuestions(question)
+      this.addToQuestionnaire(question)
     },
     changeQuestion(id, val) {
       this.updateQuestion({questionId: id, title: val})
     },
     copy(question) {
-      this.addToQuestions(question.copy())
+      this.addToQuestionnaire(question.copy())
     },
     changeType(id, type) {
       if (type === 'Paragraph') {
@@ -151,10 +159,12 @@ export default {
       this.removeQuestion(id)
     },
     goToQuestions() {
-      this.$router.push({name: 'questions', params: {id: 'questionID'}})
+      this.$router.push({name: 'questions', params: {id: this.currentQuestionnaire.id}})
     }
   },
   mounted() {
+    this.setCurrentQuestionnaire(this.$route.params.id)
+    console.log('Current ', this.currentQuestionnaire)
     setTimeout(() => {
       this.isLoaded = true;
     }, 300)

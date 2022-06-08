@@ -1,26 +1,42 @@
 <template>
-  <div class="home">
-    <div>
-      <div class="create-form" @click="createForm()">
-        <img class="template-img" src="../assets/plus.png" alt="blank-image">
+  <div class="d-flex justify-content-center">
+      <div>
+        <img class="template-img" src="../assets/plus.png" alt="blank-image" @click="createForm()">
         <p class="title" @click="createForm()">Blank</p>
       </div>
-    </div>
+      <div class="questionnaire" v-for="item in questionnaire"
+           :key="item.id"
+           @click="createForm(item.id)">
+          <img class="template-img" src="../assets/template.jpg" alt="blank-image" @click="goToCreate">
+          <p class="title">{{ item.id }}</p>
+      </div>
   </div>
 </template>
 
 <script>
 import Template from "@/components/Template";
 // @ is an alias to /src
+import {mapActions, mapState} from "vuex";
+import Helpers from "@/components/helpers/helpers";
 
 export default {
   name: 'HomeView',
-  components: {
+  components: {},
+  computed: {
+    ...mapState(['questionnaire','currentQuestionnaire'])
   },
   methods: {
-    createForm() {
-      this.$router.push({name: "create"})
-    }
+    ...mapActions(['addNewQuestionnaire',]),
+    createForm(id = null){
+      if(id === null){
+        this.addNewQuestionnaire({
+          questions: [],
+          responses: [],
+        })
+        id = this.currentQuestionnaire.id
+      }
+      this.$router.push({name: 'create', params: {id: id}})
+    },
   }
 }
 </script>
@@ -31,6 +47,9 @@ export default {
   height: 170px;
   border-radius: 5px;
   border: 1px solid white;
+  box-shadow:0 2px 2px 0 rgb(0 0 0 / 14%),
+  0 3px 1px -2px rgb(0 0 0 / 12%),
+  0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 
 .template-img:hover {
@@ -44,12 +63,7 @@ export default {
   text-align: center;
   text-decoration: none;
 }
-
-.create-form {
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+.questionnaire{
+  text-align: center;
 }
 </style>

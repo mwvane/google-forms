@@ -8,6 +8,14 @@ export default class Question {
         this.answers = answers
     }
 
+    static create(obj) {
+        const question = new Question()
+        for (const key in obj) {
+            question[key] = obj[key];
+        }
+        return question;
+    }
+
     static getDefaultQuestion() {
         return new Question(
             1,
@@ -24,4 +32,9 @@ export default class Question {
             [...this.answers]
         )
     }
+
+    getAnswerById() {
+
+    }
+
 }
