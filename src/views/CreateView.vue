@@ -36,6 +36,13 @@
                                     @addOption="addOption(question)"
                   ></OptionsComponent>
                 </div>
+                <div class="form-check form-switch toggle">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         role="switch"
+                         v-model="question.isRequired">
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Required</label>
+                </div>
                 <font-awesome-icon icon="copy"
                                    class="copy"
                                    @click="copy(question)"
@@ -85,6 +92,7 @@ export default {
   data() {
     return {
       isLoaded: false,
+      isChecked: false,
       selectOptions: [
         {
           id: 1,
@@ -160,11 +168,10 @@ export default {
     },
     goToQuestions() {
       this.$router.push({name: 'questions', params: {id: this.currentQuestionnaire.id}})
-    }
+    },
   },
   mounted() {
     this.setCurrentQuestionnaire(this.$route.params.id)
-    console.log('Current ', this.currentQuestionnaire)
     setTimeout(() => {
       this.isLoaded = true;
     }, 300)
@@ -183,5 +190,11 @@ export default {
 
 .copy:hover {
   color: #236ed1;
+}
+.toggle{
+  position: absolute;
+  bottom: 2px;
+  right: 60px;
+  font-size: 13px;
 }
 </style>
