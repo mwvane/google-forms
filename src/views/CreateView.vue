@@ -25,7 +25,14 @@
                                :question-value="question.question"
                                @deleteTemplate="deleteQuestion"
                                @textChange="changeQuestion"
-                               @changeType="changeType">
+                               @changeType="changeType"
+                               @uploadFile="uploadFile($event, question.id)">
+                <div v-if="question.image" class="text-center">
+                  <img class="picture" :src="question.image" alt="no image">
+                </div>
+                <div v-else>
+                  no image
+                </div>
                 <div v-if="isParagraph(question.type)">
                   <ParagraphComponent></ParagraphComponent>
                 </div>
@@ -93,6 +100,7 @@ export default {
     return {
       isLoaded: false,
       isChecked: false,
+      image: null,
       selectOptions: [
         {
           id: 1,
@@ -129,7 +137,8 @@ export default {
           "addOptions",
           "removeAllOptions",
           "updateOption",
-          "setCurrentQuestionnaire"
+          "setCurrentQuestionnaire",
+          "saveImage",
         ]),
     add() {
       const question = Question.getDefaultQuestion()
@@ -169,12 +178,23 @@ export default {
     goToQuestions() {
       this.$router.push({name: 'questions', params: {id: this.currentQuestionnaire.id}})
     },
+    uploadFile(image, id) {
+      this.createToBase64Image(image, id)
+    },
+    createToBase64Image(image, id) {
+      let reader = new FileReader()
+      reader.onload = (e) => {
+        this.saveImage({image: e.target.result, id: id})
+      };
+      reader.readAsDataURL(image)
+    },
   },
   mounted() {
     this.setCurrentQuestionnaire(this.$route.params.id)
     setTimeout(() => {
       this.isLoaded = true;
     }, 300)
+    const temp = this.currentQuestionnaire.questions
   }
 }
 </script>
@@ -191,10 +211,17 @@ export default {
 .copy:hover {
   color: #236ed1;
 }
-.toggle{
+
+.toggle {
   position: absolute;
   bottom: 2px;
   right: 60px;
   font-size: 13px;
+}
+
+.picture {
+  max-width: 70%;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%);
+  border-radius: 10px;
 }
 </style>
