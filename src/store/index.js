@@ -76,21 +76,25 @@ export default createStore({
             let index = Helpers.findIndexById(Number(questionnaireId), state.questionnaire)
             state.questionnaire[index].responses = state.questionnaire[index].responses.filter(item => item.id !== Number(responseId))
         },
-        saveToStorage(state){
+        saveToStorage(state) {
             Helpers.saveToStorage('data', this.state.questionnaire)
         },
-        readFromStorage(state){
+        readFromStorage(state) {
             let data = Helpers.readFromStorage('data')
-            if(data){
+            if (data) {
                 state.questionnaire = data
             }
         },
+        saveImage(state, {image, id}){
+            let index = Helpers.findIndexById(id, state.currentQuestionnaire.questions)
+            state.currentQuestionnaire.questions[index].image = image
+        }
     },
     actions: {
         addNewQuestionnaire({commit}, questionnaire) {
             commit('addNewQuestionnaire', questionnaire)
         },
-        removeQuestionnaire({commit}, id){
+        removeQuestionnaire({commit}, id) {
             commit('removeQuestionnaire', id)
         },
         addToQuestionnaire({commit}, question) {
@@ -127,11 +131,14 @@ export default createStore({
         removeResponse({commit}, {questionnaireId, responseId}) {
             commit('removeResponse', {questionnaireId, responseId})
         },
-        saveToStorage({commit}){
+        saveToStorage({commit}) {
             commit('saveToStorage')
         },
-        readFromStorage({commit}){
+        readFromStorage({commit}) {
             commit('readFromStorage')
+        },
+        saveImage({commit}, {image, id}) {
+            commit('saveImage', {image, id})
         }
     }
 })
