@@ -49,7 +49,8 @@
           </div>
           <div v-if="question.isRequired" class="required">*</div>
         </div>
-        <b-button @click="save" variant="primary">submit</b-button>
+        <b-button v-if="isValidate" @click="save" variant="primary">submit</b-button>
+        <b-button v-else @click="save" disabled="true" variant="primary">submit</b-button>
       </div>
       <div v-else class="text-center m-5">
         <div class="spinner spinner-border"></div>
@@ -77,15 +78,16 @@ export default {
     return {
       data: {},
       isLoaded: false,
+      isValidate: false,
     }
   },
   watch: {
     data: {
       handler(newData){
-        console.log(this.data)
+        this.isValidate = this.checkValidate()
       },
       deep: true
-    }
+    },
   },
   mixins: [mixin],
   methods: {
@@ -99,7 +101,16 @@ export default {
     save(){
       this.response({questionnaireId: this.$route.params.id, data: this.data})
       this.$router.push({name: 'create', params: {id: this.$route.params.id}})
-    }
+    },
+    checkValidate(){
+      for(let [index,question] of this.currentQuestionnaire.questions.entries()){
+        console.table(question)
+        if(question.isRequired && this.data[question.id].answer === null){
+          return false
+        }
+      }
+      return true
+    },
   },
   mounted() {
     if (!this.currentQuestionnaire) {
@@ -112,8 +123,11 @@ export default {
         question: question.copy()
       }
     }
+    this.isValidate = this.checkValidate()
     this.isLoaded = true;
-  }
+
+  },
+
 }
 </script>
 
