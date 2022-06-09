@@ -13,6 +13,7 @@ import {
     faAlignLeft,
     faCopy,
     faXmark,
+    faClipboardCheck,
 }
 from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome"
@@ -26,6 +27,7 @@ library.add(
     faAlignLeft,
     faCopy,
     faXmark,
+    faClipboardCheck,
 )
 
 const app = createApp(App)
