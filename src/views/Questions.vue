@@ -105,7 +105,7 @@ export default {
     checkValidate(){
       for(let [index,question] of this.currentQuestionnaire.questions.entries()){
         console.table(question)
-        if(question.isRequired && this.data[question.id].answer === null){
+        if(question.isRequired && !this.data[question.id].answer){
           return false
         }
       }
