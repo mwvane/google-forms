@@ -3,11 +3,15 @@
     <div class="header">
       <div class="">
         <div class="row">
-          <div class="col-md-9 col-12">
+          <div class="col-md-8 col-12">
             <input class="question-title-input"
                    placeholder="Question"
                    v-model="questionText"
                    @input="textChange">
+          </div>
+          <div class="col-1">
+            <input @change="uploadFile" ref="uploadImage" type="file" style="display: none">
+            <font-awesome-icon @click="selectFile" class="m-1 select-image" icon="image"></font-awesome-icon>
           </div>
           <div class="col-md-3 col-6">
             <select class="form-control" @change="changeType">
@@ -57,7 +61,15 @@ export default {
       this.delayedUpdate = setTimeout(() => {
         this.$emit('textChange', this.id, e.target.value)
       }, 300);
-    }
+    },
+    selectFile(){
+      let element = this.$refs['uploadImage']
+      element.click()
+    },
+    uploadFile(e){
+      let image = e.target.files[0]
+      this.$emit('uploadFile', image)
+    },
   },
 }
 </script>
@@ -91,5 +103,10 @@ export default {
 
 .del-btn:hover {
   color: darkred;
+}
+.select-image{
+  font-size: 30px;
+  color: #6c6a6a;
+  cursor: pointer;
 }
 </style>
