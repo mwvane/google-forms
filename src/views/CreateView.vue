@@ -27,7 +27,7 @@
                                @textChange="changeQuestion"
                                @changeType="changeType"
                                @uploadFile="uploadFile($event, question.id)">
-                <div v-if="question.image" class="text-center">
+                <div v-if="question.image" class="text-center my-3">
                   <img class="picture" :src="question.image" alt="no image">
                 </div>
                 <div v-else>

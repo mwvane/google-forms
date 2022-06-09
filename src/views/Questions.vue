@@ -8,6 +8,9 @@
             <h4>{{ question.question }}</h4>
           </div>
           <div class="options">
+            <div v-if="question.image" class="text-center my-3">
+              <img class="picture" :src="question.image" alt="no image">
+            </div>
             <div v-for="answer in question.answers" :key="question.id + '_' + answer.id">
               <div v-if="isCheckBox(question.type)">
                 <div class="form-check mb-2">
@@ -152,5 +155,11 @@ export default {
   height: 20px;
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%);
   border-bottom-right-radius: 10px;
+}
+.picture {
+  max-width: 70%;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%);
+  border-radius: 10px;
+
 }
 </style>
