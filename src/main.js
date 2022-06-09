@@ -14,6 +14,7 @@ import {
     faCopy,
     faXmark,
     faClipboardCheck,
+    faImage
 }
 from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome"
@@ -28,6 +29,7 @@ library.add(
     faCopy,
     faXmark,
     faClipboardCheck,
+    faImage
 )
 
 const app = createApp(App)
