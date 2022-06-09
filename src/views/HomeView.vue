@@ -8,8 +8,9 @@
          :key="item.id"
          @click="createForm(item.id)">
       <img class="template-img" src="../assets/template.jpg" alt="blank-image" @click="goToCreate">
-      <div class="del">
-        <font-awesome-icon icon="xmark" @click="deleteTemplate($event, item.id)"></font-awesome-icon>
+      <div class="action">
+        <font-awesome-icon v-if="item.responses.length > 0" class="mx-2 response" icon="clipboard-check" @click="goToResponses($event, item.id)"></font-awesome-icon>
+        <font-awesome-icon class="del" icon="trash" @click="deleteTemplate($event, item.id)"></font-awesome-icon>
       </div>
       <p class="title">{{ item.id }}</p>
     </div>
@@ -43,6 +44,10 @@ export default {
     deleteTemplate(e, id) {
       e.stopPropagation()
       this.removeQuestionnaire(id)
+    },
+    goToResponses(e, id) {
+      e.stopPropagation()
+      this.$router.push({name: 'responses', params: {id: id}})
     }
   }
 }
@@ -76,11 +81,22 @@ export default {
   position: relative;
 }
 
-.del {
+.action {
   position: absolute;
   top: 2px;
-  right: 14px;
-  color: #e80a0a;
-  display: block;
+  right: 15px;
+  color: #5b5858;
+  display: none;
+  font-size: 20px;
 }
+.questionnaire:hover .action{
+  display: flex;
+}
+.del:hover{
+  color: #c00909;
+}
+.response:hover{
+  color: #023af1;
+}
+
 </style>
