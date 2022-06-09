@@ -1,11 +1,12 @@
 import {TYPE_MULTIPLE_CHOICE} from "@/components/helpers/constants";
 
 export default class Question {
-    constructor(id, question, type, answers,isRequired = false) {
+    constructor(id, question, type, answers,image='',isRequired = false) {
         this.id = id
         this.question = question
         this.type = type
         this.answers = answers
+        this.image = image
         this.isRequired = isRequired
     }
 
